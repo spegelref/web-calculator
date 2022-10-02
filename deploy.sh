@@ -9,6 +9,11 @@ npm run build
 cd dist
 echo > .nojekyll
 
+if [ -d .git ]; then
+    echo "Deleting old git repo."
+    rm -fR .git
+fi
+
 git init
 git checkout -b master
 git add -A

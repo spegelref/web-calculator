@@ -1,47 +1,71 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+<div class="main-container">
+  <div class="display">
+    <calculator-display :value="text" />
+  </div>
+  <div class="function">
+  </div>
+  <div class="keypad">
+    <calculator-keypad 
+      @decimal="decimal"
+      @number="append"
+      @op="operator"
+      @mem="memory"
+      @eval="evaluate"
+    />
+  </div>
+  <div class="safearea">
+    <!-- Empty area -->
+  </div>
+</div>
 </template>
 
+<script setup>
+import { ref } from 'vue'
+
+import CalculatorDisplay from '@/components/CalculatorDisplay.vue'
+import CalculatorKeypad from '@/components/CalculatorKeypad.vue'
+
+const text = ref('')
+
+function decimal() {
+    console.log('comma')
+    text.value = text.value.concat(',')
+}
+
+function append(i) {
+    console.log('Append number', i)
+    text.value = text.value.concat(i.toString())
+}
+
+function operator(op) {
+  console.log('operator', op)
+}
+
+function memory(action) {
+  console.log('memory', action)
+}
+
+function evaluate() {
+  console.log('evaluate')
+}
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
+.main-container {
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: [main] 100%;
+  grid-template-rows: 100px auto 375px [safearea] 34px [safearea-end];
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.display {
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.function {
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.keypad {
 }
 </style>
