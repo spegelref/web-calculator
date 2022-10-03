@@ -97,47 +97,47 @@
       class="col4 line4 operator"
       @click="$emit('op', 'add')"
     >
-      +
+      &#x002b;
       </button>
     <button 
       class="col4 line3 operator" 
       @click="$emit('op', 'sub')"
     >
-      -
-      </button>
+      &#x2212;
+    </button>
     <button 
       class="col4 line2 operator" 
       @click="$emit('op', 'mul')"
     >
-      *
-      </button>
+      &#x00d7;
+    </button>
     <button 
       class="col4 line1 operator" 
       @click="$emit('op', 'div')"
     >
-      /
+      &#x00f7;
     </button>
     <button 
       class="col2 line4" 
       @click="$emit('decimal')"
     >
-      ,
-      </button>
+      .
+    </button>
     <button 
       class="col3 line4 operator" 
       @click="$emit('op', 'neg')"
     >
-      (-)
-      </button>
+      (&#x002d;)
+    </button>
     <button 
       class="col1 line5 clear" 
-      @click="$emit('op', 'clear')"
+      @click="$emit('clear')"
     >
       C
       </button>
     <button 
       class="col2 line5 backspace"
-      @click="$emit('op', 'bs')"
+      @click="$emit('backspace')"
     >
       BS
       </button>
@@ -152,7 +152,15 @@
 </template>
 
 <script setup>
-const emit = defineEmits(['decimal', 'number', 'op', 'eval', 'mem'])
+const emit = defineEmits([
+  'decimal',
+  'number',
+  'op',
+  'eval',
+  'backspace',
+  'clear',
+  'mem'
+])
 </script>
 
 <style scoped>
@@ -176,12 +184,6 @@ const emit = defineEmits(['decimal', 'number', 'op', 'eval', 'mem'])
 .keypad > .four-grid {
   grid-template-columns: [col-start col1] 25% [col2] 25% [col3] 25% [col4] 25% [col-end];
   grid-template-rows: [line1] 20% [line2] 20% [line3] 20% [line4] 20% [line5] 20%;
-}
-
-
-.four-grid > .eval {
-  grid-row: line5;
-  grid-column: col3 / col-end;
 }
 
 .line1 {
@@ -210,6 +212,10 @@ const emit = defineEmits(['decimal', 'number', 'op', 'eval', 'mem'])
 }
 .col4 {
   grid-column: col4;
+}
+.four-grid > .eval {
+  grid-row: line5;
+  grid-column: col3 / col-end;
 }
 
 /* Colors */

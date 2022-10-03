@@ -1,19 +1,18 @@
 <template>
 <div class="main-container">
-  <div class="display">
-    <calculator-display :value="text" />
-  </div>
-  <div class="function">
-  </div>
-  <div class="keypad">
-    <calculator-keypad 
-      @decimal="decimal"
-      @number="append"
-      @op="operator"
-      @mem="memory"
-      @eval="evaluate"
-    />
-  </div>
+  <calculator-display 
+    :input="state.input"
+    :output="state.output" />
+  <div class="function"></div>
+  <calculator-keypad 
+    @decimal="decimal"
+    @number="append"
+    @op="operator"
+    @mem="memory"
+    @eval="evaluate"
+    @clear="clear"
+    @backspace="backspace"
+  />
   <div class="safearea">
     <!-- Empty area -->
   </div>
@@ -21,25 +20,41 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { reactive } from 'vue'
 
 import CalculatorDisplay from '@/components/CalculatorDisplay.vue'
 import CalculatorKeypad from '@/components/CalculatorKeypad.vue'
 
-const text = ref('')
+import { operationToSign } from '@/services/calculatorService'
+
+const state = reactive({
+  input: '',
+  output: '',
+  cursorPosition: 0,
+  evaluated: false
+})
 
 function decimal() {
-    console.log('comma')
-    text.value = text.value.concat(',')
+  if (state.evaluated) {
+    clear()
+  }
+  state.input = state.input.concat('.')
 }
 
 function append(i) {
-    console.log('Append number', i)
-    text.value = text.value.concat(i.toString())
+  if (state.evaluated) {
+    clear()
+  }
+  state.input = state.input.concat(i.toString())
 }
 
 function operator(op) {
-  console.log('operator', op)
+  if (state.evaluated) {
+    clear()
+  }
+
+  const sign = operationToSign(op)
+  state.input = state.input.concat(sign)
 }
 
 function memory(action) {
@@ -47,8 +62,23 @@ function memory(action) {
 }
 
 function evaluate() {
-  console.log('evaluate')
+  state.output = eval(state.input)
+  state.evaluated = true
 }
+
+function clear() {
+  state.input = ''
+  state.output = ''
+  state.cursorPosition = 0
+  state.evaluated = false
+}
+
+function backspace() {
+  if (state.input.length > 0) { 
+    state.input = state.input.slice(0, -1)
+  }
+}
+
 </script>
 
 <style scoped>
@@ -57,15 +87,6 @@ function evaluate() {
 
   display: grid;
   grid-template-columns: [main] 100%;
-  grid-template-rows: 100px auto 375px [safearea] 34px [safearea-end];
-}
-
-.display {
-}
-
-.function {
-}
-
-.keypad {
+  grid-template-rows: 110px auto 350px [safearea] 34px [safearea-end];
 }
 </style>

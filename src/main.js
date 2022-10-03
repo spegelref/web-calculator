@@ -3,10 +3,8 @@ import App from './App.vue'
 
 import './assets/main.css'
 
-// Disable scrolling.
-// window.addEventListener("scroll", (e) => {
-//   e.preventDefault();
-//   window.scrollTo(0, 0);
-// });
+// Code to hide app unless it's pinned
+// if (window.navigator.standalone) {
+// }
 
 createApp(App).mount('#app')
